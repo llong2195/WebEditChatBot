@@ -1,19 +1,28 @@
 
-class SiteController{
-    index = (req, res)=>{
-        return res.render('site/index')
+class SiteController {
+    // [GET] /
+    index = (req, res) => {
+        return res.render('site/index', { title: 'Trang Chủ' })
     }
-    contact = (req, res)=>{
-        return res.render('site/contact')
+    // [GET] /contact
+    contact = (req, res) => {
+        return res.render('site/contact', { title: 'Liên Hệ' })
     }
-    about = (req, res)=>{
-        return res.render('site/about')
+    // [POST] /contact
+    sendMessage = async (req, res) => {
+        return res.render('site/contact', { title: 'POST Liên Hệ' })
     }
-    index = (req, res)=>{
-        return res.render('site/index')
+    // [GET] /about
+    about = (req, res) => {
+        return res.render('site/about', { title: 'Chúng Tôi' })
     }
-    index = (req, res)=>{
-        return res.render('site/index')
+    // [GET] /donate
+    donate = (req, res) => {
+        return res.render('site/donate', { title: 'Donate' })
+    }
+    // [GET] /service
+    service = (req, res) => {
+        return res.render('site/service', { title: 'Dịch Vụ' })
     }
 }
 

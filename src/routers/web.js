@@ -10,6 +10,7 @@ const ChatRouter = require("./ChatRouter");
 
 router.use('/', SiteRouter.init());
 
+
 // --------------------- ADMIN --------------------------------
 
 router.use('/admin', AdminRouter.init());
@@ -18,5 +19,13 @@ router.use('/admin', AdminRouter.init());
 
 router.use('/chat', ChatRouter.init());
 
+
+router.get("/404", (req, res) => {
+    res.render("site/404", { title: "404 Not Found" });
+})
+
+router.get("*", (req, res) => {
+    res.redirect("/404");
+})
 
 module.exports = router;

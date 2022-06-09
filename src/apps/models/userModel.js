@@ -3,10 +3,6 @@ const bcrypt = require('bcrypt');
 const validator = require('validator')
 
 const userSchema = mongoose.Schema({
-    username: {
-        type: String,
-        required: [true, 'please enter a name'],
-    },
     email: {
         type: String,
         required: [true, 'please enter a email'],
@@ -19,6 +15,46 @@ const userSchema = mongoose.Schema({
         required: [true, 'please enter a password'],
         minlength: [6, "the password should be at least 6 characters"]
     },
+    first_name: {
+        type: String,
+        required: [true, 'please enter a first name'],
+    },
+    last_name: {
+        type: String,
+        required: [true, 'please enter a last name'],
+    },
+    avatar: {
+        type: String,
+        default: ''
+    },
+    gender: {
+        type: String,
+        enum: ["male","female"],
+        default: 'male'
+    },
+    address: {
+        type: String,
+        default: ''
+    },
+    phone_number: {
+        type: Number,
+        required: [true, 'please enter a phone_number'],
+        minlength: [6, "the phone_number should be at least 6 characters"]
+    },
+    role_id: {
+        type: mongoose.Types.ObjectId,
+        ref: "role",
+        required: true
+    },
+    api_key: {
+        type: String,
+        default: '',
+    },
+    is_deleted: {
+        type: Boolean,
+        default: false
+    },
+    
 }, {
     timestamps: true,
 })
