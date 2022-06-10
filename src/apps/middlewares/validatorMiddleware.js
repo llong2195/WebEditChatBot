@@ -1,19 +1,18 @@
 const { check } = require('express-validator');
 
 
-class validatorHelper {
-    Login = () => {
+class validatorMiddleware {
+    loginValidator = () => {
         return [
             check('password')
                 .isLength({ min: 5 })
-                .withMessage('must be at least 5 chars long')
-                .matches(/\d/)
-                .withMessage('must contain a number'),
+                .withMessage('password phải hơn 5 kí tự')
+                .matches(/\W+/g)
+                .withMessage('gồm kí tự đặc biệt'),
             check('email')
                 .isEmail()
-                .matches(/\d/)
-                .withMessage('must contain a number')
+                .withMessage('email không hợp lệ')
         ]
     }
 }
-module.exports = new validatorHelper();
+module.exports = new validatorMiddleware();

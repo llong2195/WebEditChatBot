@@ -10,7 +10,7 @@ module.exports = {
         session_secure: true,
         tmp: __dirname+"/../temp",
         MONGODB_URI: process.env.MONGODB_URI || "mongodb://localhost/",
-        JWT_ACCESS_TOKEN_SECRET : process.env.JWT_ACCESS_TOKEN_SECRET || "llong",
+        JWT_ACCESS_TOKEN_SECRET : process.env.JWT_ACCESS_TOKEN_SECRET || "JWT_SECRET_llong@@",
         JWT_ACCESS_TOKEN_LIFE : process.env.JWT_ACCESS_TOKEN_LIFE || "10m",
     },
     mail: {

@@ -4,6 +4,7 @@ const config = require('config');
 const cors = require('cors');
 const express_session = require('express-session');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const { connectDB } = require('../common/database');
 
 app.use(morgan('dev'));
@@ -15,6 +16,7 @@ app.use("/static", express.static(config.get("app").static_folder));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 connectDB();
 
@@ -43,15 +45,15 @@ app.use((req, res, next) => {
 
 
 // err handler function
-app.use((err, req, res, next) => {
-    const error = app.get('env') === "development" ? err : {};
-    const status = err.status || 500;
-    // return res.status(status).json({
-    //     error: {
-    //         message: error.message
-    //     }
-    // })
-    return res.render("site/404")
-})
+// app.use((err, req, res, next) => {
+//     const error = app.get('env') === "development" ? err : {};
+//     const status = err.status || 500;
+//     // return res.status(status).json({
+//     //     error: {
+//     //         message: error.message
+//     //     }
+//     // })
+//     return res.render("site/404")
+// })
 
 module.exports = app;

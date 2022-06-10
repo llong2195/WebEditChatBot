@@ -140,7 +140,13 @@
 
               <form id="formAuthentication" class="mb-3" action="/admin/login" method="POST">
                 <div class="mb-3">
-                  <label for="email" class="form-label">Email</label>
+                  <label for="email" class="form-label <%= error?.email ? "text-danger": ""  %> ">
+                    <% if (error?.email) { %>
+                      <%= error.email %> 
+                    <% } else { %>
+                      Email
+                    <% }%> 
+                  </label>
                   <input
                     type="email"
                     class="form-control"
@@ -152,7 +158,13 @@
                 </div>
                 <div class="mb-3 form-password-toggle">
                   <div class="d-flex justify-content-between">
-                    <label class="form-label" for="password">Password</label>
+                    <label class="form-label <%= error?.password ? "text-danger": ""  %>" for="password">
+                      <% if (error?.password) { %>
+                        <%= error.password %> 
+                      <% } else { %>
+                        password
+                      <% }%> 
+                    </label>
                     <a href="#">
                       <small>Forgot Password?</small>
                     </a>

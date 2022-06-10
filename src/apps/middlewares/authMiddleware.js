@@ -12,11 +12,11 @@ class authMiddleware {
     isAuth = async (req, res, next) => {
 
         const tokenFromClient = req.cookies?.token || "";
-        console.log(tokenFromClient);
         if (tokenFromClient) {
             try {
-                const decoded = await jwtHelper.verifyToken(token);
-
+                console.log("DECODE ....");
+                const decoded = await jwtHelper.verifyToken(tokenFromClient);
+                console.log("decode :" , decoded);
                 next();
             } catch (error) {
                 return res.redirect("admin/login");
@@ -28,11 +28,11 @@ class authMiddleware {
     isLogin = async (req, res, next) => {
 
         const tokenFromClient = req.cookies?.token || "";
-        console.log(tokenFromClient);
         if (tokenFromClient) {
             try {
-                const decoded = await jwtHelper.verifyToken(token);
-                
+                console.log("DECODE ...");
+                const decoded = await jwtHelper.verifyToken(tokenFromClient);
+                console.log("decode :" , decoded);
                 return res.redirect("/admin");
             } catch (error) {
                 next();

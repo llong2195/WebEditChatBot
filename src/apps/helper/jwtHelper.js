@@ -14,14 +14,21 @@ class jwtHelper {
             if (data.hasOwnProperty('password')) {
                 delete data.password;
             }
-            jwt.sign(data, JWT_ACCESS_TOKEN_SECRET,
-                { expiresIn: JWT_ACCESS_TOKEN_LIFE, },
+            console.log(typeof data);
+            jwt.sign(
+                { data },
+                JWT_ACCESS_TOKEN_SECRET,
+                {
+                    expiresIn: JWT_ACCESS_TOKEN_LIFE,
+                },
                 (error, token) => {
                     if (error) {
                         return reject(error);
                     }
+                    // console.log(token);
                     resolve(token);
                 });
+
         })
     }
     /**
