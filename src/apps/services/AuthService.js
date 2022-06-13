@@ -13,7 +13,6 @@ class AuthService{
 
             const validatorErr = validateHelper(req);
             if (validatorErr) {
-                console.log("?? :", validatorErr);
                 return res.render("admin/login", {
                     title: "Đăng Nhập",
                     error: validatorErr

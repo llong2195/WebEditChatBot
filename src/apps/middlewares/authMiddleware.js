@@ -16,12 +16,18 @@ class authMiddleware {
             try {
                 console.log("DECODE ....");
                 const decoded = await jwtHelper.verifyToken(tokenFromClient);
-                console.log("decode :" , decoded);
+                console.log("decode :", decoded);
                 next();
             } catch (error) {
+                res.cookie("token", "", {
+                    maxAge: 1
+                })
                 return res.redirect("admin/login");
             }
         } else {
+            res.cookie("token", "", {
+                maxAge: 1
+            })
             return res.redirect("admin/login");
         }
     }
@@ -30,12 +36,12 @@ class authMiddleware {
         const tokenFromClient = req.cookies?.token || "";
         if (tokenFromClient) {
             try {
-                console.log("DECODE ...");
                 const decoded = await jwtHelper.verifyToken(tokenFromClient);
-                console.log("decode :" , decoded);
-                return res.redirect("/admin");
+                if (decoded) {
+                    return res.redirect("/admin");
+                }
             } catch (error) {
-                next();
+                return res.redirect("admin/login");
             }
         } else {
             next();

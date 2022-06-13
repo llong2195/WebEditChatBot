@@ -41,10 +41,10 @@ const userSchema = mongoose.Schema({
         required: [true, 'please enter a phone_number'],
         minlength: [6, "the phone_number should be at least 6 characters"]
     },
-    role_id: {
-        type: mongoose.Types.ObjectId,
-        ref: "role",
-        required: true
+    role: {
+        type: String,
+        enum: ["admin", "user"],
+        default: 'user'
     },
     api_key: {
         type: String,

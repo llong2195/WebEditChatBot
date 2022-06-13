@@ -14,7 +14,6 @@ class jwtHelper {
             if (data.hasOwnProperty('password')) {
                 delete data.password;
             }
-            console.log(typeof data);
             jwt.sign(
                 { data },
                 JWT_ACCESS_TOKEN_SECRET,

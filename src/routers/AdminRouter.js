@@ -3,6 +3,7 @@ const router = express.Router();
 const AdminController = require('../apps/controllers/AdminController');
 const AuthController = require('../apps/controllers/AuthController');
 const authMiddleware = require('../apps/middlewares/authMiddleware');
+const uploadMiddleware = require('../apps/middlewares/uploadMiddleware')
 
 const validatorMiddleware = require('../apps/middlewares/validatorMiddleware')
 class AdminRouter {
@@ -16,6 +17,8 @@ class AdminRouter {
         router.get("/logout", AuthController.logout);
 
         router.get("/profile", authMiddleware.isAuth, AdminController.profile);
+        router.post("/profile", authMiddleware.isAuth, uploadMiddleware.single("avatar"), AdminController.postProfile);
+        router.post("/UpdateAvatar", authMiddleware.isAuth, uploadMiddleware.single("avatar"), AdminController.updateAvatar);
 
         router.get("/user", authMiddleware.isAuth, AdminController.user);
 

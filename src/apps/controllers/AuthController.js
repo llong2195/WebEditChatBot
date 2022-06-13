@@ -16,12 +16,10 @@ class AuthController {
     }
     
     logout(req, res) {
-        console.log("logout ....");
         res.cookie("token", "",{
             httpOnly: true,
             maxAge: 1
         });
-        console.log("logout oke");
         return res.redirect('/admin/login');
     }
 }
