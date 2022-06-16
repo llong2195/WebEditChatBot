@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const validator = require('validator')
+const validator = require('validator');
+const { v4: uuidv4 } = require('uuid');
 
 const userSchema = mongoose.Schema({
     email: {
@@ -61,6 +62,7 @@ const userSchema = mongoose.Schema({
 userSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
+    this.api_key = uuidv4();
     next();
 })
 userSchema.statics.login = async function (email, password) {

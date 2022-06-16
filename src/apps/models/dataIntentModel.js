@@ -7,7 +7,8 @@ const dataIntentSchema = mongoose.Schema({
     },
     intent_id: {
         type: mongoose.Types.ObjectId,
-        ref : "intent"
+        ref : "intent",
+        required: true,
     },
     user_id: {
         type: mongoose.Types.ObjectId,

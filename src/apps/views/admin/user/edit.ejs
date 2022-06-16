@@ -1,4 +1,4 @@
-<%- include('layout/head', {title: title}); %>
+<%- include('../layout/head', {title: title}); %>
 
   <body>
     <!-- Layout wrapper -->
@@ -6,7 +6,7 @@
       <div class="layout-container">
         <!-- Menu -->
 
-        <%- include('layout/sidebar'); %>
+        <%- include('../layout/sidebar'); %>
 
           <!-- / Menu -->
 
@@ -14,7 +14,7 @@
           <div class="layout-page">
             <!-- Navbar -->
 
-            <%- include ('layout/navbar'); %>
+            <%- include ('../layout/navbar'); %>
 
               <!-- / Navbar -->
 
@@ -69,6 +69,8 @@
                         <hr class="my-0" />
                         <div class="card-body">
                           <form id="formAccountSettings" method="POST" action="/admin/profile">
+                            <input class="form-control" hidden type="text" id="id" name="id"
+                                  value="<%=user?.id%>" />
                             <div class="row">
                               <div class="mb-3 col-md-6">
                                 <label for="first_name" class="form-label">Họ</label>
@@ -129,33 +131,25 @@
                         </div>
                         <!-- /Account -->
                       </div>
-                      <!-- <div class="card">
-                        <h5 class="card-header">Xóa Tài Khoản</h5>
+                      <div class="card">
+                        <h5 class="card-header">Vô Hiệu Hóa Tài Khoản</h5>
                         <div class="card-body">
                           <div class="mb-3 col-12 mb-0">
                             <div class="alert alert-warning">
-                              <h6 class="alert-heading fw-bold mb-1">Bạn Có Chắc Chắn Muốn Xóa Tài Khoản?</h6>
-                              <p class="mb-0">Nếu bạn chọn xóa tài khoản, tài khoản sẽ không được phục hồi
+                              <h6 class="alert-heading fw-bold mb-1">Bạn Có Chắc Chắn Muốn Vô Hiệu Hóa Tài Khoản?</h6>
+                              <p class="mb-0">Nếu bạn chọn vô hiệu hóa tài khoản, tài khoản sẽ không được phục hồi
                               </p>
                             </div>
                           </div>
-                          <form id="formAccountDeactivation" method onsubmit="return false">
-                            <div class="form-check mb-3">
-                              <input class="form-check-input" type="checkbox" name="accountActivation"
-                                id="accountActivation" />
-                              <label class="form-check-label" for="accountActivation">I confirm my account
-                                deactivation</label>
-                            </div>
-                            <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
-                          </form>
+                          <a href="/admin/user/delete/<%= user?.id %>" class="btn btn-danger deactivate-account">Vô Hiệu Hóa</a>
                         </div>
-                      </div> -->
+                      </div>
                     </div>
                   </div>
                 </div>
                 <!-- / Content -->
 
                 <!-- Footer -->
-                <%- include('layout/footer'); %>
+                <%- include('../layout/footer'); %>
                 <script src="/static/admin/js/pages-account-settings-account.js"></script>
-                  <%- include('layout/script'); %>
+                  <%- include('../layout/script'); %>

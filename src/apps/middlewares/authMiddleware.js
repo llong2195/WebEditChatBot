@@ -14,21 +14,21 @@ class authMiddleware {
         const tokenFromClient = req.cookies?.token || "";
         if (tokenFromClient) {
             try {
-                console.log("DECODE ....");
+                // console.log("DECODE ....");
                 const decoded = await jwtHelper.verifyToken(tokenFromClient);
-                console.log("decode :", decoded);
+                // console.log("decode :", decoded);
                 next();
             } catch (error) {
                 res.cookie("token", "", {
                     maxAge: 1
                 })
-                return res.redirect("admin/login");
+                return res.redirect("/admin/login");
             }
         } else {
             res.cookie("token", "", {
                 maxAge: 1
             })
-            return res.redirect("admin/login");
+            return res.redirect("/admin/login");
         }
     }
     isLogin = async (req, res, next) => {
@@ -41,10 +41,28 @@ class authMiddleware {
                     return res.redirect("/admin");
                 }
             } catch (error) {
-                return res.redirect("admin/login");
+                return res.redirect("/admin/login");
             }
         } else {
             next();
+        }
+    }
+
+    isAdmin = async (req, res, next) => {
+        const tokenFromClient = req.cookies?.token || "";
+        if (tokenFromClient) {
+            try {
+                const decoded = await jwtHelper.verifyToken(tokenFromClient);
+                if (decoded?.data?.role === "user") {
+                    return res.redirect("/admin");
+                }else{
+                    next();
+                }
+            } catch (error) {
+                return res.redirect("/admin/login");
+            }
+        } else {
+            return res.redirect("/admin/login");
         }
     }
 }

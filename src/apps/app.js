@@ -3,10 +3,15 @@ const app = express();
 const config = require('config');
 const cors = require('cors');
 const express_session = require('express-session');
-const morgan = require('morgan');
+// const helmet = require('helmet');
+const xss = require('xss-clean');
+const mongoSanitize = require('express-mongo-sanitize');
+const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const { connectDB } = require('../common/database');
 
+// dev 
+const morgan = require('morgan');
 app.use(morgan('dev'));
 
 app.set("views", config.get("app").views_folder);
@@ -17,6 +22,18 @@ app.use("/static", express.static(config.get("app").static_folder));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+
+// sanitize request data
+app.use(xss());
+app.use(mongoSanitize());
+
+
+// gzip compression
+app.use(compression());
+
+// enable cors
+app.use(cors());
+app.options('*', cors());
 
 connectDB();
 
