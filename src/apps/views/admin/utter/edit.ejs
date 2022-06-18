@@ -40,24 +40,24 @@
 
                         <hr class="my-0" />
                         <div class="card-body">
-                          <form id="formAccountSettings" method="POST" action="/admin/intent/edit/<%= intent?.id %>">
+                          <form id="formAccountSettings" method="POST" action="/admin/utter/edit/<%= utter?.id %>">
                             <div class="row">
                               <input class="form-control" type="text" hidden required name="id" id="id"
-                                value="<%= intent?.id %>" />
+                                value="<%= utter?.id %>" />
                               <div class="mb-3 col-md-6">
                                 <label for="name" class="form-label">Tên</label>
                                 <input class="form-control" type="text" required id="name" name="name"
-                                  value="<%= intent?.name %>" autofocus />
+                                  value="<%= utter?.name %>" autofocus />
                               </div>
                               <div class="mb-3 col-md-6">
                                 <label for="description" class="form-label">Mô Tả</label>
                                 <input class="form-control" type="text" required name="description" id="description"
-                                  value="<%= intent?.description %>" />
+                                  value="<%= utter?.description %>" />
                               </div>
                               <div class="mb-3 col-md-12">
-                                <label for="dataintent" class="form-label">Dữ Liệu (ngăn cách bằng xuống dòng)</label>
+                                <label for="datautter" class="form-label">Dữ Liệu (ngăn cách bằng xuống dòng)</label>
                                 <textarea class="form-control" placeholder="xin chào &#10;Hello" required
-                                  name="dataintent" id="dataintent" cols="30" rows="10"><%= dataIntent %></textarea>
+                                  name="datautter" id="datautter" cols="30" rows="10"><%= datautter %></textarea>
                               </div>
 
                             </div>

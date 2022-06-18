@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const AdminController = require('../apps/controllers/AdminController');
 const AuthController = require('../apps/controllers/AuthController');
+const DataIntentController = require('../apps/controllers/DataIntentController');
+const DataUtterController = require('../apps/controllers/DataUtterController');
 const IntentController = require('../apps/controllers/IntentController');
 const UserController = require('../apps/controllers/UserController');
+const UtterController = require('../apps/controllers/UtterController');
 const authMiddleware = require('../apps/middlewares/authMiddleware');
 const uploadMiddleware = require('../apps/middlewares/uploadMiddleware')
 
@@ -38,14 +41,30 @@ class AdminRouter {
         router.post("/intent/edit/:id", authMiddleware.isAuth, IntentController.update);
         router.get("/intent/delete/:id", authMiddleware.isAuth, IntentController.delete);
         
-        router.get("/intent", authMiddleware.isAuth, AdminController.index);
+        // --------------------- DATAINTENT -------------
+        router.get("/dataintent", authMiddleware.isAuth, DataIntentController.index);
+        router.get("/dataintent/edit/:id", authMiddleware.isAuth, DataIntentController.edit);
+        router.post("/dataintent/edit/:id", authMiddleware.isAuth, DataIntentController.update);
+        router.get("/dataintent/delete/:id", authMiddleware.isAuth, DataIntentController.delete);
+        
+        // --------------------- UTTER ----------------
+        router.get("/utter", authMiddleware.isAuth, UtterController.index);
+        router.get("/utter/create", authMiddleware.isAuth, UtterController.create);
+        router.post("/utter/create", authMiddleware.isAuth, UtterController.store);
+        router.get("/utter/edit/:id", authMiddleware.isAuth, UtterController.edit);
+        router.post("/utter/edit/:id", authMiddleware.isAuth, UtterController.update);
+        router.get("/utter/delete/:id", authMiddleware.isAuth, UtterController.delete);
+        
+        // --------------------- DATAUTTER -------------
+        router.get("/datautter", authMiddleware.isAuth, DataUtterController.index);
+        router.get("/datautter/edit/:id", authMiddleware.isAuth, DataUtterController.edit);
+        router.post("/datautter/edit/:id", authMiddleware.isAuth, DataUtterController.update);
+        router.get("/datautter/delete/:id", authMiddleware.isAuth, DataUtterController.delete);
+        
+        
 
-        router.get("/intent", authMiddleware.isAuth, AdminController.index);
 
-        router.get("/intent", authMiddleware.isAuth, AdminController.index);
-
-        router.get("/intent", authMiddleware.isAuth, AdminController.index);
-
+        
         router.get("*", (req, res) => {
             res.render("admin/404")
         })

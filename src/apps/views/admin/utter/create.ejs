@@ -40,24 +40,22 @@
 
                         <hr class="my-0" />
                         <div class="card-body">
-                          <form id="formAccountSettings" method="POST" action="/admin/intent/edit/<%= intent?.id %>">
+                          <form id="formAccountSettings" method="POST" action="/admin/utter/create">
                             <div class="row">
-                              <input class="form-control" type="text" hidden required name="id" id="id"
-                                value="<%= intent?.id %>" />
                               <div class="mb-3 col-md-6">
                                 <label for="name" class="form-label">Tên</label>
-                                <input class="form-control" type="text" required id="name" name="name"
-                                  value="<%= intent?.name %>" autofocus />
+                                <input class="form-control" type="text" required id="name" name="name" value=""
+                                  autofocus />
                               </div>
                               <div class="mb-3 col-md-6">
                                 <label for="description" class="form-label">Mô Tả</label>
                                 <input class="form-control" type="text" required name="description" id="description"
-                                  value="<%= intent?.description %>" />
+                                  value="" />
                               </div>
                               <div class="mb-3 col-md-12">
-                                <label for="dataintent" class="form-label">Dữ Liệu (ngăn cách bằng xuống dòng)</label>
-                                <textarea class="form-control" placeholder="xin chào &#10;Hello" required
-                                  name="dataintent" id="dataintent" cols="30" rows="10"><%= dataIntent %></textarea>
+                                <label for="description" class="form-label">Dữ Liệu (ngăn cách bằng xuống dòng)</label>
+                                <textarea class="form-control" placeholder="- xin chào &#10;- Hello" required name="datautter" id="datautter" cols="30"
+                                  rows="10"></textarea>
                               </div>
 
                             </div>

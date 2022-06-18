@@ -1,21 +1,21 @@
 const jwtHelper = require("../helper/jwtHelper");
-const intentModel = require("../models/intentModel");
-const dataIntentModel = require("../models/dataIntentModel");
+const utterModel = require("../models/utterModel");
+const dataUtterModel = require("../models/dataUtterModel");
 const slug = require("slug")
-class IntentController {
-    // [GET] /intent
+class UtterController {
+    // [GET] /Utter
     async index(req, res) {
         try {
             const tokenFromClient = req.cookies?.token || "";
             const decode = await jwtHelper.verifyToken(tokenFromClient);
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
-            const avatar = decode?.data?.avatar; $count: "passing_scores"
-            let intents = await intentModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]);
-            // console.log(intents);
-            return res.render('admin/intent/index', {
+            const avatar = decode?.data?.avatar;
+            let utters = await utterModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]);
+            // console.log(utters);
+            return res.render('admin/utter/index', {
                 title: 'Danh Sách Câu Hỏi',
-                intents: intents,
+                utters: utters,
                 Login: {
                     role,
                     fullname,
@@ -27,7 +27,7 @@ class IntentController {
             return res.redirect('/admin');
         }
     }
-    // [GET] /user/create
+    // [GET] /utter/create
     async create(req, res) {
         try {
             const tokenFromClient = req.cookies?.token || "";
@@ -35,7 +35,7 @@ class IntentController {
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-            return res.render("admin/intent/create", {
+            return res.render("admin/utter/create", {
                 title: 'Thêm Mới Câu Hỏi',
                 Login: {
                     role,
@@ -47,7 +47,7 @@ class IntentController {
             return res.redirect('/admin');
         }
     }
-    // [POST] /intent/create
+    // [POST] /utter/create
     async store(req, res) {
         try {
             const tokenFromClient = req.cookies?.token || "";
@@ -57,28 +57,28 @@ class IntentController {
             if (!idUser) {
                 return res.redirect('/admin/login');
             }
-            let intent = {
+            let utter = {
                 name: body.name,
                 slug: slug(body.name),
                 description: body.description,
                 user_id: idUser
             }
-            // console.log(intent);
-            new intentModel(intent).save().then(async (rs) => {
-                let dataintent = body.dataintent || null;
-                if (dataintent) {
-                    dataintent = [...dataintent.split("\n")].map(item => item.trim()).filter(value => value);
-                    dataintent = [...dataintent].map(item => {
+            // console.log(utter);
+            new utterModel(utter).save().then(async (rs) => {
+                let dataUtter = body.dataUtter || null;
+                if (dataUtter) {
+                    dataUtter = [...dataUtter.split("\n")].map(item => item.trim()).filter(value => value);
+                    dataUtter = [...dataUtter].map(item => {
                         return {
                             'content': item,
-                            'intent_id': rs._id,
+                            'utter_id': rs._id,
                             'user_id': idUser
                         }
                     })
-                    // console.log(dataintent);
-                    await dataIntentModel.insertMany(dataintent);
+                    // console.log(dataUtter);
+                    await dataUtterModel.insertMany(dataUtter);
                 }
-                return res.redirect('/admin/intent');
+                return res.redirect('/admin/utter');
             }).catch((err) => {
                 console.log(err);
                 return res.redirect('/admin');
@@ -89,7 +89,7 @@ class IntentController {
             return res.redirect('/admin');
         }
     }
-    // [GET] /intent/edit/:id
+    // [GET] /Utter/edit/:id
     async edit(req, res) {
         try {
 
@@ -101,21 +101,21 @@ class IntentController {
 
             const { id } = req.params
             // console.log(id);
-            const prIntent = intentModel.findById(id);
-            const prdataIntent = dataIntentModel.find({ intent_id: id })
+            const prUtter = utterModel.findById(id);
+            const prdataUtter = dataUtterModel.find({ Utter_id: id })
 
-            Promise.all([prIntent, prdataIntent]).then((value) => {
-                // console.log('dataIntent :',value[1]);
-                const dataIntent = [...value[1]].map(item => item.content).join('\n');
-                return res.render("admin/intent/edit", {
+            Promise.all([prUtter, prdataUtter]).then((value) => {
+                // console.log('dataUtter :',value[1]);
+                const dataUtter = [...value[1]].map(item => item.content).join('\n');
+                return res.render("admin/utter/edit", {
                     title: 'Sửa Thông Tin Câu Hỏi',
                     Login: {
                         role,
                         fullname,
                         avatar
                     },
-                    intent: value[0],
-                    dataIntent: dataIntent,
+                    Utter: value[0],
+                    dataUtter: dataUtter,
                 })
             })
         } catch (error) {
@@ -123,7 +123,7 @@ class IntentController {
             return res.redirect('/admin');
         }
     }
-    // [POST] /intent/edit/:id
+    // [POST] /utter/edit/:id
     async update(req, res) {
         try {
             const tokenFromClient = req.cookies?.token || "";
@@ -132,33 +132,33 @@ class IntentController {
             let body = req.body;
             const { id } = req.params;
             if (!id) {
-                return res.redirect('/admin/intent');
+                return res.redirect('/admin/utter');
             }
-            let updateIntent = {
+            let updateUtter = {
                 name: body.name,
                 slug: slug(body?.name),
                 description: body.description,
             }
-            // console.log(intent);
-            intentModel.findOneAndUpdate({ _id: id }, { $set: updateIntent })
+            // console.log(Utter);
+            utterModel.findOneAndUpdate({ _id: id }, { $set: updateUtter })
                 .then(async (rs) => {
-                    let dataintent = body.dataintent || null;
-                    if (dataintent) {
-                        dataintent = [...dataintent.split("\n")].map(item => item.trim()).filter(value => value);
-                        dataintent = [...dataintent].map(item => {
+                    let dataUtter = body.dataUtter || null;
+                    if (dataUtter) {
+                        dataUtter = [...dataUtter.split("\n")].map(item => item.trim()).filter(value => value);
+                        dataUtter = [...dataUtter].map(item => {
                             return {
                                 'content': item,
-                                'intent_id': rs._id,
+                                'utter_id': rs._id,
                                 'user_id': idUser
                             }
                         })
-                        // console.log(dataintent);
-                        let prDeleteDataIntent = dataIntentModel.deleteMany({ intent_id: id })
-                        let prInsertDataIntent = dataIntentModel.insertMany(dataintent);
+                        // console.log(dataUtter);
+                        let prDeleteDataUtter = dataUtterModel.deleteMany({ utter_id: id })
+                        let prInsertDataUtter = dataUtterModel.insertMany(dataUtter);
 
-                        Promise.all([prDeleteDataIntent, prInsertDataIntent])
+                        Promise.all([prDeleteDataUtter, prInsertDataUtter])
                     }
-                    return res.redirect('/admin/intent');
+                    return res.redirect('/admin/utter');
                 }).catch((err) => {
                     console.log(err);
                     return res.redirect('/admin');
@@ -173,11 +173,11 @@ class IntentController {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            let prDeleteDataIntent = dataIntentModel.deleteMany({ intent_id: id })
-            let prDeleteIntent = intentModel.findOneAndDelete({ _id: id })
+            let prDeleteDataUtter = dataUtterModel.deleteMany({ Utter_id: id })
+            let prDeleteUtter = UtterModel.findOneAndDelete({ _id: id })
 
-            Promise.all([prDeleteDataIntent, prDeleteIntent])
-            res.redirect("/admin/intent");
+            Promise.all([prDeleteDataUtter, prDeleteUtter])
+            res.redirect("/admin/utter");
 
         } catch (error) {
             console.log(error);
@@ -186,4 +186,4 @@ class IntentController {
     }
 }
 
-module.exports = new IntentController();
+module.exports = new UtterController();
