@@ -11,8 +11,8 @@ const cookieParser = require('cookie-parser');
 const { connectDB } = require('../common/database');
 
 // dev 
-const morgan = require('morgan');
-app.use(morgan('dev'));
+// const morgan = require('morgan');
+// app.use(morgan('dev'));
 
 app.set("views", config.get("app").views_folder);
 app.set("view engine", config.get("app").view_engine);

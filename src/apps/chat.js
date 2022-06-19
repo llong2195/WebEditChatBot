@@ -14,6 +14,7 @@ module.exports = async (server) => {
 
 
     io.on("connection", async (socket) => {
+        console.log(socket.id)
         await manager.load(path.resolve("src/public/", 'model/model.nlp'));
         socket.emit("message", "Connected Successfully");
 

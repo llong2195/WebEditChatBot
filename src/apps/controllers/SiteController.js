@@ -75,6 +75,10 @@ class SiteController {
     service(req, res) {
         return res.render('site/service', { title: 'Dịch Vụ' })
     }
+    // [GET] /chat
+    chat(req, res) {
+        return res.render('site/chat')
+    }
 }
 
 module.exports = new SiteController();
