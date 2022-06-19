@@ -54,7 +54,7 @@
                                   <%= count++ %>
                                 </th>
                                 <td>
-                                  <%= utter?.content %>
+                                  <%= utter?.content.length > 50 ? utter?.content.substring(0,50) + "..." : utter?.content%>
                                 </td>
                                 <td>
                                   <%= utter?.utter_id?.name %>

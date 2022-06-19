@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dataIntentSchema = mongoose.Schema({
     content: {
         type: String,
-        required: [true, 'please enter a content'],
+        required: true,
     },
     intent_id: {
         type: mongoose.Types.ObjectId,

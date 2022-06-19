@@ -6,6 +6,7 @@ const DataIntentController = require('../apps/controllers/DataIntentController')
 const DataUtterController = require('../apps/controllers/DataUtterController');
 const IntentController = require('../apps/controllers/IntentController');
 const nlpController = require('../apps/controllers/nlpController');
+const ReviewController = require('../apps/controllers/ReviewController');
 const StoryController = require('../apps/controllers/StoryController');
 const UserController = require('../apps/controllers/UserController');
 const UtterController = require('../apps/controllers/UtterController');
@@ -81,7 +82,13 @@ class AdminRouter {
 
 
 
-
+        // --------------------- REVIEW -------------
+        router.get("/review", authMiddleware.isAuth, ReviewController.index);
+        router.get("/review/create", authMiddleware.isAuth, ReviewController.create);
+        router.post("/review/create", authMiddleware.isAuth, uploadMiddleware.single("avatar"), ReviewController.store);
+        router.get("/review/edit/:id", authMiddleware.isAuth, ReviewController.edit);
+        router.post("/review/edit/:id", authMiddleware.isAuth, uploadMiddleware.single("avatar"), ReviewController.update);
+        router.get("/review/delete/:id", authMiddleware.isAuth, ReviewController.delete);
 
 
         router.get("*", (req, res) => {

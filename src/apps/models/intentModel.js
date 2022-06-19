@@ -3,15 +3,15 @@ const mongoose = require('mongoose');
 const intentSchema = mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'please enter a name'],
+        required: true,
     },
     slug: {
         type: String,
-        required: [true, 'please enter a slug'],
+        required: true,
     },
     description: {
         type: String,
-        required: [true, 'please enter a slug'],
+        required: true,
     },
     user_id :{
         type: mongoose.Types.ObjectId,

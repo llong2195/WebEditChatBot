@@ -1,28 +1,26 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const validator = require('validator');
 const { v4: uuidv4 } = require('uuid');
 
 const userSchema = mongoose.Schema({
     email: {
         type: String,
-        required: [true, 'please enter a email'],
+        required: true,
         unique: true,
         lowercase: true,
-        validate: [validator.isEmail, 'please enter a valid email address']
     },
     password: {
         type: String,
-        required: [true, 'please enter a password'],
-        minlength: [6, "the password should be at least 6 characters"]
+        required: true,
+        minlength: 6
     },
     first_name: {
         type: String,
-        required: [true, 'please enter a first name'],
+        required: true,
     },
     last_name: {
         type: String,
-        required: [true, 'please enter a last name'],
+        required: true,
     },
     avatar: {
         type: String,
@@ -39,8 +37,8 @@ const userSchema = mongoose.Schema({
     },
     phone_number: {
         type: Number,
-        required: [true, 'please enter a phone_number'],
-        minlength: [6, "the phone_number should be at least 6 characters"]
+        required: true,
+        minlength: 6
     },
     role: {
         type: String,

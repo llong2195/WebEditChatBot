@@ -1,30 +1,26 @@
 const mongoose = require('mongoose');
-
 const reviewSchema = mongoose.Schema({
-    first_name: {
+    fullname: {
         type: String,
-        required: [true, 'please enter a first name'],
-    },
-    last_name: {
-        type: String,
-        required: [true, 'please enter a last name'],
+        required: true,
     },
     email: {
         type: String,
-        required: [true, 'please enter a email'],
-        unique: true,
+        required: true,
         lowercase: true,
-        validate: [validator.isEmail, 'please enter a valid email address']
     },
     avatar: {
         type: String,
         default: ''
     },
+    content: {
+        type: String,
+        default: ''
+    },
     phone_number: {
         type: String,
-        required: [true, 'please enter a phone_number'],
-        minlength: [6, "the phone_number should be at least 6 characters"],
-        
+        required: true,
+        minlength: 6,
     },
     star:{
         type: Number,
@@ -32,9 +28,9 @@ const reviewSchema = mongoose.Schema({
         max: 5,
         default: 5
     },
-    is_hide:{
+    is_hidded:{
         type: Boolean,
-        default: false
+        default: "true"
     }
 }, {
     timestamps: true,

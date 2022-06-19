@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const dataUtterSchema = mongoose.Schema({
     content: {
         type: String,
-        required: [true, 'please enter a content'],
+        required: true,
     },
     utter_id: {
         type: mongoose.Types.ObjectId,

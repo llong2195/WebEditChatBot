@@ -9,6 +9,6 @@ module.exports.connectDB = async () => {
         return conn;
     } catch (error) {
         console.error(`Error: ${error}`);
-        process.exit(1);
+        // process.exit(1);
     }
 }
