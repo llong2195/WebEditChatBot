@@ -1,7 +1,8 @@
 const jwtHelper = require("../helper/jwtHelper");
 const intentModel = require("../models/intentModel");
 const dataIntentModel = require("../models/dataIntentModel");
-const slug = require("slug")
+const slug = require("slug");
+const paginate = require("../../common/paginate");
 class IntentController {
     // [GET] /intent
     async index(req, res) {
@@ -11,11 +12,21 @@ class IntentController {
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-            let intents = await intentModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]);
+
+            let limit = parseInt(req.query.limit) || 3;
+            let page = parseInt(req.query.page) || 1;
+            let skip = limit * (page - 1);
+            const total = await intentModel.countDocuments();
+            const totalPage = Math.ceil(total / limit);
+
+            let intents = await intentModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]).skip(skip).limit(limit);
             // console.log(intents);
             return res.render('admin/intent/index', {
                 title: 'Danh Sách Câu Hỏi',
                 intents: intents,
+                pages: paginate(page, totalPage),
+                page: page,
+                totalPage: totalPage,
                 Login: {
                     role,
                     fullname,
@@ -188,7 +199,7 @@ class IntentController {
     getData(req, res) {
         try {
             const { id } = req.params;
-            dataIntentModel.find({intent_id: id}).then((data) => {
+            dataIntentModel.find({ intent_id: id }).then((data) => {
                 return res.status(200).json(data);
             })
         } catch (error) {

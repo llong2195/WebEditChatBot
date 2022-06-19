@@ -1,8 +1,9 @@
 const jwtHelper = require("../helper/jwtHelper");
-const dataUtterModel = require("../models/dataUtterModel");
+const reportModel = require("../models/reportModel");
 const paginate = require("../../common/paginate");
-class DatautterController {
-    // [GET] /datautter
+
+class ReportController {
+    // [GET] /report
     async index(req, res) {
         try {
             const tokenFromClient = req.cookies?.token || "";
@@ -11,19 +12,17 @@ class DatautterController {
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
 
-            
             let limit = parseInt(req.query.limit) || 10;
             let page = parseInt(req.query.page) || 1;
             let skip = limit * (page - 1);
-            const total = await dataUtterModel.countDocuments();
+            const total = await reportModel.countDocuments();
             const totalPage = Math.ceil(total / limit);
 
 
-            let utters = await dataUtterModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }, { path: 'utter_id', select: 'name slug' }]).skip(skip).limit(limit);
-            // console.log(utters);
-            return res.render('admin/datautter/index', {
-                title: 'Danh Sách Dữ Liệu Câu Hỏi',
-                utters: utters,
+            const reports = await reportModel.find().skip(skip).limit(limit);
+            return res.render('admin/report', {
+                title: 'Phản Hồi',
+                reports: reports,
                 pages: paginate(page, totalPage),
                 page: page,
                 totalPage: totalPage,
@@ -34,65 +33,54 @@ class DatautterController {
                 }
             })
         } catch (error) {
-            console.log({ "err index :": error });
+            console.log(error);
             return res.redirect('/admin');
         }
     }
-
-    // [GET] /datautter/edit/:id
     async edit(req, res) {
         try {
-
             const tokenFromClient = req.cookies?.token || "";
             const decode = await jwtHelper.verifyToken(tokenFromClient);
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-
-            const { id } = req.params
-            // console.log(id);
-            let utter = await dataUtterModel.findById(id);
-            console.log(utter);
-            return res.render('admin/datautter/edit', {
-                title: 'Dữ Liệu Câu Hỏi',
-                utter: utter,
+            const { id } = req.params;
+            const report = await reportModel.findById(id);
+            return res.render('admin/report/edit', {
+                title: 'Phản Hồi',
+                report: report,
                 Login: {
                     role,
                     fullname,
                     avatar
                 }
             })
-
         } catch (error) {
             console.log(error);
             return res.redirect('/admin');
         }
     }
-    // [POST] /datautter/edit/:id
     async update(req, res) {
         try {
-
-            const { id } = req.params
-            const updateutter = {
+            
+            const { id } = req.params;
+            let updateReport = {
+                name: req.body.name,
+                email: req.body.email,
                 content: req.body.content
             }
-            console.log(id);
-            console.log(updateutter);
-            let utter = await dataUtterModel.findOneAndUpdate({ id: id }, { $set: updateutter });
-            console.log(utter);
-            return res.redirect('/admin/datautter');
-
+            await reportModel.findByIdAndUpdate(id, {$set : updateReport});
+            return res.redirect('/admin/report');
         } catch (error) {
             console.log(error);
             return res.redirect('/admin');
         }
     }
-    // [GET] /user/delete/:id
     delete(req, res) {
         try {
             const { id } = req.params;
-            dataUtterModel.findByIdAndDelete(id).then(() => {
-                res.redirect("/admin/datautter");
+            reportModel.findByIdAndDelete(id).then(() => {
+                res.redirect('/admin/report')
             })
 
         } catch (error) {
@@ -101,5 +89,4 @@ class DatautterController {
         }
     }
 }
-
-module.exports = new DatautterController();
+module.exports = new ReportController();

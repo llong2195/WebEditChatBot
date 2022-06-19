@@ -1,7 +1,8 @@
 const jwtHelper = require("../helper/jwtHelper");
 const utterModel = require("../models/utterModel");
 const dataUtterModel = require("../models/dataUtterModel");
-const slug = require("slug")
+const slug = require("slug");
+const paginate = require("../../common/paginate");
 class UtterController {
     // [GET] /utter
     async index(req, res) {
@@ -11,11 +12,22 @@ class UtterController {
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-            let utters = await utterModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]);
+
+            
+            let limit = parseInt(req.query.limit) || 3;
+            let page = parseInt(req.query.page) || 1;
+            let skip = limit * (page - 1);
+            const total = await utterModel.countDocuments();
+            const totalPage = Math.ceil(total / limit);
+
+            let utters = await utterModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]).skip(skip).limit(limit);
             // console.log(utters);
             return res.render('admin/utter/index', {
                 title: 'Danh Sách Câu Trả Lời',
                 utters: utters,
+                pages: paginate(page, totalPage),
+                page: page,
+                totalPage: totalPage,
                 Login: {
                     role,
                     fullname,

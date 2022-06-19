@@ -3,6 +3,7 @@ const storyModel = require("../models/storyModel");
 const utterModel = require("../models/utterModel");
 const intentModel = require("../models/intentModel");
 const slug = require("slug");
+const paginate = require("../../common/paginate");
 class StoryController {
     // [GET] /story
     async index(req, res) {
@@ -12,11 +13,22 @@ class StoryController {
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-            let stories = await storyModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }, { path: 'intent_id', select: 'name slug' }, { path: 'utter_id', select: 'name slug' }]);
+            
+            let limit = parseInt(req.query.limit) || 10;
+            let page = parseInt(req.query.page) || 1;
+            let skip = limit * (page - 1);
+            const total = await storyModel.countDocuments();
+            const totalPage = Math.ceil(total / limit);
+
+
+            let stories = await storyModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }, { path: 'intent_id', select: 'name slug' }, { path: 'utter_id', select: 'name slug' }]).skip(skip).limit(limit);
             // console.log(intents);
             return res.render('admin/story/index', {
                 title: 'Danh Sách Dữ Liệu Câu Hỏi',
                 stories: stories,
+                pages: paginate(page, totalPage),
+                page: page,
+                totalPage: totalPage,
                 Login: {
                     role,
                     fullname,

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const jwtHelper = require("../helper/jwtHelper");
 const reviewModel = require("../models/reviewModel");
-
+const paginate = require("../../common/paginate");
 class ReviewController {
     // [GET] /review
     async index(req, res) {
@@ -12,11 +12,22 @@ class ReviewController {
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-            let reviews = await reviewModel.find({});
+
+            
+            let limit = parseInt(req.query.limit) || 10;
+            let page = parseInt(req.query.page) || 1;
+            let skip = limit * (page - 1);
+            const total = await reviewModel.countDocuments();
+            const totalPage = Math.ceil(total / limit);
+
+            let reviews = await reviewModel.find({}).skip(skip).limit(limit);
             // console.log(users);
             return res.render('admin/review/index', {
                 title: 'Danh Sách Review',
                 reviews: reviews,
+                pages: paginate(page, totalPage),
+                page: page,
+                totalPage: totalPage,
                 Login: {
                     role,
                     fullname,

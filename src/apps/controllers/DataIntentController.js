@@ -1,5 +1,6 @@
 const jwtHelper = require("../helper/jwtHelper");
 const dataIntentModel = require("../models/dataIntentModel");
+const paginate = require("../../common/paginate");
 class DataIntentController {
     // [GET] /dataintent
     async index(req, res) {
@@ -9,11 +10,21 @@ class DataIntentController {
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
-            let intents = await dataIntentModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }, { path: 'intent_id', select: 'name slug' }]);
+
+            let limit = parseInt(req.query.limit) || 10;
+            let page = parseInt(req.query.page) || 1;
+            let skip = limit * (page - 1);
+            const total = await dataIntentModel.countDocuments();
+            const totalPage = Math.ceil(total / limit);
+
+            let intents = await dataIntentModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }, { path: 'intent_id', select: 'name slug' }]).skip(skip).limit(limit);
             // console.log(intents);
             return res.render('admin/dataintent/index', {
                 title: 'Danh Sách Dữ Liệu Câu Hỏi',
                 intents: intents,
+                pages: paginate(page, totalPage),
+                page: page,
+                totalPage: totalPage,
                 Login: {
                     role,
                     fullname,

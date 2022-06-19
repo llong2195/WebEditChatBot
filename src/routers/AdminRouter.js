@@ -6,6 +6,7 @@ const DataIntentController = require('../apps/controllers/DataIntentController')
 const DataUtterController = require('../apps/controllers/DataUtterController');
 const IntentController = require('../apps/controllers/IntentController');
 const nlpController = require('../apps/controllers/nlpController');
+const ReportController = require('../apps/controllers/ReportController');
 const ReviewController = require('../apps/controllers/ReviewController');
 const StoryController = require('../apps/controllers/StoryController');
 const UserController = require('../apps/controllers/UserController');
@@ -89,6 +90,15 @@ class AdminRouter {
         router.get("/review/edit/:id", authMiddleware.isAuth, ReviewController.edit);
         router.post("/review/edit/:id", authMiddleware.isAuth, uploadMiddleware.single("avatar"), ReviewController.update);
         router.get("/review/delete/:id", authMiddleware.isAuth, ReviewController.delete);
+
+
+        // --------------------- REPORT -------------
+        router.get("/report", authMiddleware.isAuth, ReportController.index);
+        // router.get("/report/create", authMiddleware.isAuth, ReportController.create);
+        // router.post("/report/create", authMiddleware.isAuth, ReportController.store);
+        router.get("/report/edit/:id", authMiddleware.isAuth, ReportController.edit);
+        router.post("/report/edit/:id", authMiddleware.isAuth, ReportController.update);
+        router.get("/report/delete/:id", authMiddleware.isAuth, ReportController.delete);
 
 
         router.get("*", (req, res) => {
