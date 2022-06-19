@@ -10,7 +10,7 @@ class IntentController {
             const decode = await jwtHelper.verifyToken(tokenFromClient);
             const role = decode?.data?.role;
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
-            const avatar = decode?.data?.avatar; $count: "passing_scores"
+            const avatar = decode?.data?.avatar;
             let intents = await intentModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]);
             // console.log(intents);
             return res.render('admin/intent/index', {
@@ -179,6 +179,18 @@ class IntentController {
             Promise.all([prDeleteDataIntent, prDeleteIntent])
             res.redirect("/admin/intent");
 
+        } catch (error) {
+            console.log(error);
+            return res.redirect('/admin');
+        }
+    }
+    // [GET] /intent/getData/:id
+    getData(req, res) {
+        try {
+            const { id } = req.params;
+            dataIntentModel.find({intent_id: id}).then((data) => {
+                return res.status(200).json(data);
+            })
         } catch (error) {
             console.log(error);
             return res.redirect('/admin');

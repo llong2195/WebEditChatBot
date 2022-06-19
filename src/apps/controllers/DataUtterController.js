@@ -1,5 +1,4 @@
 const jwtHelper = require("../helper/jwtHelper");
-const utterModel = require("../models/utterModel");
 const dataUtterModel = require("../models/dataUtterModel");
 class DatautterController {
     // [GET] /datautter
@@ -76,7 +75,7 @@ class DatautterController {
         }
     }
     // [GET] /user/delete/:id
-    async delete(req, res) {
+    delete(req, res) {
         try {
             const { id } = req.params;
             dataUtterModel.findByIdAndDelete(id).then(() => {

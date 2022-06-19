@@ -1,10 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const SiteController = require('../apps/controllers/SiteController')
-
+const SiteController = require('../apps/controllers/SiteController');
+const activeMiddleware = require('../apps/middlewares/activeMiddleware');
 class SiteRouter {
     init(){
-        router.get("/", SiteController.index)
+        router.get("/", activeMiddleware.countActive, SiteController.index)
 
         router.route("/contact")
             .get(SiteController.contact)

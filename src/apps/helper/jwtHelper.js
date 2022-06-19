@@ -11,6 +11,7 @@ class jwtHelper {
      */
     generateToken = (data) => {
         return new Promise((resolve, reject) => {
+            // eslint-disable-next-line no-prototype-builtins
             if (data.hasOwnProperty('password')) {
                 delete data.password;
             }

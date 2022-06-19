@@ -148,7 +148,6 @@ class UserController {
     // [POST] /user/delete
     async delete(req, res) {
         try {
-            let body = req.body;
             const { id } = req.params;
             const updateUser = {
                 is_deleted: true

@@ -1,6 +1,4 @@
-const { validationResult } = require('express-validator');
-const userModel = require('./../models/userModel');
-const jwtHelper = require('./../helper/jwtHelper')
+
 const AuthService = require('./../services/AuthService')
 class AuthController {
     // [GET] /admin/login

@@ -3,7 +3,7 @@ const utterModel = require("../models/utterModel");
 const dataUtterModel = require("../models/dataUtterModel");
 const slug = require("slug")
 class UtterController {
-    // [GET] /Utter
+    // [GET] /utter
     async index(req, res) {
         try {
             const tokenFromClient = req.cookies?.token || "";
@@ -14,7 +14,7 @@ class UtterController {
             let utters = await utterModel.find({}).populate([{ path: 'user_id', select: 'first_name last_name' }]);
             // console.log(utters);
             return res.render('admin/utter/index', {
-                title: 'Danh Sách Câu Hỏi',
+                title: 'Danh Sách Câu Trả Lời',
                 utters: utters,
                 Login: {
                     role,
@@ -36,7 +36,7 @@ class UtterController {
             const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
             const avatar = decode?.data?.avatar;
             return res.render("admin/utter/create", {
-                title: 'Thêm Mới Câu Hỏi',
+                title: 'Thêm Mới Câu Trả Lời',
                 Login: {
                     role,
                     fullname,
@@ -65,18 +65,19 @@ class UtterController {
             }
             // console.log(utter);
             new utterModel(utter).save().then(async (rs) => {
-                let dataUtter = body.dataUtter || null;
-                if (dataUtter) {
-                    dataUtter = [...dataUtter.split("\n")].map(item => item.trim()).filter(value => value);
-                    dataUtter = [...dataUtter].map(item => {
+                let datautter = body.datautter || null;
+                console.log(datautter);
+                if (datautter) {
+                    datautter = [...datautter.split("\n")].map(item => item.trim()).filter(value => value);
+                    datautter = [...datautter].map(item => {
                         return {
                             'content': item,
                             'utter_id': rs._id,
                             'user_id': idUser
                         }
                     })
-                    // console.log(dataUtter);
-                    await dataUtterModel.insertMany(dataUtter);
+                    // console.log(datautter);
+                    await dataUtterModel.insertMany(datautter);
                 }
                 return res.redirect('/admin/utter');
             }).catch((err) => {
@@ -89,7 +90,7 @@ class UtterController {
             return res.redirect('/admin');
         }
     }
-    // [GET] /Utter/edit/:id
+    // [GET] /utter/edit/:id
     async edit(req, res) {
         try {
 
@@ -101,21 +102,21 @@ class UtterController {
 
             const { id } = req.params
             // console.log(id);
-            const prUtter = utterModel.findById(id);
-            const prdataUtter = dataUtterModel.find({ Utter_id: id })
+            const prutter = utterModel.findById(id);
+            const prdatautter = dataUtterModel.find({ utter_id: id })
 
-            Promise.all([prUtter, prdataUtter]).then((value) => {
-                // console.log('dataUtter :',value[1]);
-                const dataUtter = [...value[1]].map(item => item.content).join('\n');
+            Promise.all([prutter, prdatautter]).then((value) => {
+                // console.log('datautter :',value[1]);
+                const datautter = [...value[1]].map(item => item.content).join('\n');
                 return res.render("admin/utter/edit", {
-                    title: 'Sửa Thông Tin Câu Hỏi',
+                    title: 'Sửa Thông Tin Câu Trả Lời',
                     Login: {
                         role,
                         fullname,
                         avatar
                     },
-                    Utter: value[0],
-                    dataUtter: dataUtter,
+                    utter: value[0],
+                    datautter: datautter,
                 })
             })
         } catch (error) {
@@ -134,29 +135,31 @@ class UtterController {
             if (!id) {
                 return res.redirect('/admin/utter');
             }
-            let updateUtter = {
+            let updateutter = {
                 name: body.name,
                 slug: slug(body?.name),
                 description: body.description,
             }
-            // console.log(Utter);
-            utterModel.findOneAndUpdate({ _id: id }, { $set: updateUtter })
+            // console.log(utter);
+            utterModel.findOneAndUpdate({ _id: id }, { $set: updateutter })
                 .then(async (rs) => {
-                    let dataUtter = body.dataUtter || null;
-                    if (dataUtter) {
-                        dataUtter = [...dataUtter.split("\n")].map(item => item.trim()).filter(value => value);
-                        dataUtter = [...dataUtter].map(item => {
+                    let datautter = body.datautter || null;
+                    if (datautter) {
+                        datautter = [...datautter.split("\n")].map(item => item.trim()).filter(value => value);
+                        datautter = [...datautter].map(item => {
                             return {
                                 'content': item,
                                 'utter_id': rs._id,
                                 'user_id': idUser
                             }
                         })
-                        // console.log(dataUtter);
-                        let prDeleteDataUtter = dataUtterModel.deleteMany({ utter_id: id })
-                        let prInsertDataUtter = dataUtterModel.insertMany(dataUtter);
+                        // console.log(datautter);
+                        let prDeleteDatautter = dataUtterModel.deleteMany({ utter_id: id })
+                        let prInsertDatautter = dataUtterModel.insertMany(datautter);
 
-                        Promise.all([prDeleteDataUtter, prInsertDataUtter])
+                        Promise.all([prDeleteDatautter, prInsertDatautter]).catch(err => {
+                            console.log(err);
+                        })
                     }
                     return res.redirect('/admin/utter');
                 }).catch((err) => {
@@ -173,12 +176,24 @@ class UtterController {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            let prDeleteDataUtter = dataUtterModel.deleteMany({ Utter_id: id })
-            let prDeleteUtter = UtterModel.findOneAndDelete({ _id: id })
+            let prDeleteDatautter = dataUtterModel.deleteMany({ utter_id: id })
+            let prDeleteutter = utterModel.findOneAndDelete({ _id: id })
 
-            Promise.all([prDeleteDataUtter, prDeleteUtter])
+            Promise.all([prDeleteDatautter, prDeleteutter])
             res.redirect("/admin/utter");
 
+        } catch (error) {
+            console.log(error);
+            return res.redirect('/admin');
+        }
+    }
+    // [GET] /utter/getData/:id
+    getData(req, res) {
+        try {
+            const { id } = req.params;
+            dataUtterModel.find({utter_id: id}).then((data) => {
+                return res.status(200).json(data);
+            })
         } catch (error) {
             console.log(error);
             return res.redirect('/admin');

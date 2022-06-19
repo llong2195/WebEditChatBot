@@ -1,5 +1,11 @@
 const jwtHelper = require("../helper/jwtHelper");
 const userModel = require("../models/userModel");
+const utterModel = require("../models/utterModel");
+const intentModel = require("../models/intentModel");
+const dataUtterModel = require("../models/dataUtterModel");
+const dataIntentModel = require("../models/dataIntentModel");
+const storyModel = require("../models/storyModel");
+const activeModel = require("../models/activeModel");
 const fs = require('fs');
 const path = require('path');
 /**
@@ -15,14 +21,32 @@ class AdminController {
         const role = decode?.data?.role;
         const fullname = decode?.data?.first_name + " " + decode?.data?.last_name;
         const avatar = decode?.data?.avatar;
-        return res.render('admin/index', {
-            title: 'Trang Chủ Quản Trị',
-            Login: {
-                role,
-                fullname,
-                avatar
-            }
-        })
+
+        const prmUtter = utterModel.find().countDocuments();
+        const prmdataUtter = dataUtterModel.find().countDocuments();
+        const prmIntent = intentModel.find().countDocuments();
+        const prmdataIntent = dataIntentModel.find().countDocuments();
+        const prmStory = storyModel.find().countDocuments();
+        const prmUser = userModel.find().countDocuments();
+        const prmActive = activeModel.find().sort({time : 1}).limit(14);
+        Promise.all([prmUtter, prmdataUtter, prmIntent, prmdataIntent, prmStory, prmUser, prmActive])
+            .then(([countUtter, countdataUtter, countIntent, countdataIntent, countStory, countUser, actives]) => {
+                return res.render('admin/index', {
+                    title: 'Trang Chủ Quản Trị',
+                    Login: {
+                        role,
+                        fullname,
+                        avatar
+                    },
+                    countUtter,
+                    countIntent,
+                    countdataUtter,
+                    countdataIntent,
+                    countStory,
+                    countUser,
+                    actives
+                })
+            })
     }
     // [GET] /admin/profile
     async profile(req, res) {
@@ -101,7 +125,7 @@ class AdminController {
             return res.redirect('/admin/profile');
         }
     }
-    
+
 
 
 }

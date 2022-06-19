@@ -40,14 +40,14 @@
 
                         <hr class="my-0" />
                         <div class="card-body">
-                          <form id="formAccountSettings" method="POST" action="/admin/dataintent/edit/<%= intent?.id %> ">
+                          <form id="formAccountSettings" method="POST" action="/admin/datautter/edit/<%= utter?.id %> ">
                             <div class="row">
                               <input class="form-control" type="text" hidden required name="id" id="id"
-                                value="<%= intent?.id %>" />
+                                value="<%= utter?.id %>" />
                               <div class="mb-6 col-md-12">
                                 <label for="content" class="form-label">Dữ Liệu</label>
                                 <input class="form-control" type="text" required id="content" name="content"
-                                  value="<%= intent?.content %>" autofocus />
+                                  value="<%= utter?.content %>" autofocus />
                               </div>
                             </div>
 

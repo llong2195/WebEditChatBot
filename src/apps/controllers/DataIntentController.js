@@ -1,5 +1,4 @@
 const jwtHelper = require("../helper/jwtHelper");
-const intentModel = require("../models/intentModel");
 const dataIntentModel = require("../models/dataIntentModel");
 class DataIntentController {
     // [GET] /dataintent

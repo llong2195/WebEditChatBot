@@ -5,6 +5,8 @@ const AuthController = require('../apps/controllers/AuthController');
 const DataIntentController = require('../apps/controllers/DataIntentController');
 const DataUtterController = require('../apps/controllers/DataUtterController');
 const IntentController = require('../apps/controllers/IntentController');
+const nlpController = require('../apps/controllers/nlpController');
+const StoryController = require('../apps/controllers/StoryController');
 const UserController = require('../apps/controllers/UserController');
 const UtterController = require('../apps/controllers/UtterController');
 const authMiddleware = require('../apps/middlewares/authMiddleware');
@@ -40,13 +42,14 @@ class AdminRouter {
         router.get("/intent/edit/:id", authMiddleware.isAuth, IntentController.edit);
         router.post("/intent/edit/:id", authMiddleware.isAuth, IntentController.update);
         router.get("/intent/delete/:id", authMiddleware.isAuth, IntentController.delete);
-        
+        router.get("/intent/getData/:id", authMiddleware.isAuth, IntentController.getData);
+
         // --------------------- DATAINTENT -------------
         router.get("/dataintent", authMiddleware.isAuth, DataIntentController.index);
         router.get("/dataintent/edit/:id", authMiddleware.isAuth, DataIntentController.edit);
         router.post("/dataintent/edit/:id", authMiddleware.isAuth, DataIntentController.update);
         router.get("/dataintent/delete/:id", authMiddleware.isAuth, DataIntentController.delete);
-        
+
         // --------------------- UTTER ----------------
         router.get("/utter", authMiddleware.isAuth, UtterController.index);
         router.get("/utter/create", authMiddleware.isAuth, UtterController.create);
@@ -54,17 +57,33 @@ class AdminRouter {
         router.get("/utter/edit/:id", authMiddleware.isAuth, UtterController.edit);
         router.post("/utter/edit/:id", authMiddleware.isAuth, UtterController.update);
         router.get("/utter/delete/:id", authMiddleware.isAuth, UtterController.delete);
-        
+        router.get("/utter/getData/:id", authMiddleware.isAuth, UtterController.getData);
+
         // --------------------- DATAUTTER -------------
         router.get("/datautter", authMiddleware.isAuth, DataUtterController.index);
         router.get("/datautter/edit/:id", authMiddleware.isAuth, DataUtterController.edit);
         router.post("/datautter/edit/:id", authMiddleware.isAuth, DataUtterController.update);
         router.get("/datautter/delete/:id", authMiddleware.isAuth, DataUtterController.delete);
-        
-        
 
 
-        
+        // --------------------- STORY -------------
+        router.get("/story", authMiddleware.isAuth, StoryController.index);
+        router.get("/story/create", authMiddleware.isAuth, StoryController.create);
+        router.post("/story/create", authMiddleware.isAuth, StoryController.store);
+        router.get("/story/edit/:id", authMiddleware.isAuth, StoryController.edit);
+        router.post("/story/edit/:id", authMiddleware.isAuth, StoryController.update);
+        router.get("/story/delete/:id", authMiddleware.isAuth, StoryController.delete);
+
+
+        // --------------------- TRAINBOT -------------
+        router.get("/nlp", authMiddleware.isAuth, authMiddleware.isAdmin, nlpController.index);
+        router.get("/nlp/train", authMiddleware.isAuth, authMiddleware.isAdmin, nlpController.train);
+
+
+
+
+
+
         router.get("*", (req, res) => {
             res.render("admin/404")
         })

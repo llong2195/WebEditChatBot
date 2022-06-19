@@ -5,16 +5,26 @@ const storySchema = mongoose.Schema({
         type: String,
         required: [true, 'please enter a name'],
     },
-    data: [{
-        intent_id:{
-            type: mongoose.Types.ObjectId,
-            ref:"intent"
-        },
-        utter_id:{
-            type: mongoose.Types.ObjectId,
-            ref:"utter"
-        },
-    }],
+    slug: {
+        type: String,
+        required: [true, 'please enter a slug'],
+    },
+    description: {
+        type: String,
+        required: [true, 'please enter a description'],
+    },
+    intent_id: {
+        type: mongoose.Types.ObjectId,
+        ref: "intent"
+    },
+    utter_id: {
+        type: mongoose.Types.ObjectId,
+        ref: "utter"
+    },
+    user_id: {
+        type: mongoose.Types.ObjectId,
+        ref: "user"
+    },
 }, {
     timestamps: true,
 })
